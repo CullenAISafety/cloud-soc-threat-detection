@@ -1,0 +1,195 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "SSH Failed Login Attempts",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(ssh_failed_logins_total[5m])",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Network Traffic Volume",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(node_network_receive_bytes_total[5m])",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Active Security Alerts",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "security_alerts_active",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 8
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Authentication Failures",
+      "datasource": "Loki",
+      "targets": [
+        {
+          "expr": "count_over_time({job=\"auth_logs\"} |= \"Failed password\" [5m])",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 6,
+        "y": 8
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "CPU Usage",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(node_cpu_seconds_total{mode!=\"idle\"}[5m])",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 8
+      }
+    },
+    {
+      "type": "table",
+      "title": "Recent Security Events",
+      "datasource": "Loki",
+      "targets": [
+        {
+          "expr": "{job=\"auth_logs\"} |= \"Failed password\"",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      }
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [
+    "security",
+    "soc",
+    "cloud"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timezone": "",
+  "title": "Cloud SOC Security Dashboard",
+  "version": 1
+}
+
+What This Dashboard Shows
+
+Panels include:
+
+1️⃣ SSH Brute Force Monitoring
+
+SSH Failed Login Attempts
+
+2️⃣ Network Traffic Monitoring
+
+Detect traffic spikes / scanning
+
+3️⃣ Security Alert Counter
+
+Active alerts in detection engine
+
+4️⃣ Authentication Failures
+
+Live log query from Loki
+
+5️⃣ CPU Usage
+
+Detect resource abuse / crypto mining
+
+6️⃣ Recent Security Events Table
+
+Real-time log feed
+How to Import the Dashboard
+
+In Grafana:
+
+Dashboards → Import → Upload JSON
+
+Select:
+
+grafana_dashboard.json
+
+Then choose your datasource:
+
+Prometheus
+Loki
