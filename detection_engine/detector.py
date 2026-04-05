@@ -1,21 +1,28 @@
-import re
+from log_parser import parse_auth_log
+from rules import detect_bruteforce
+from alerting.slack_alert import send_alert
 
-def parse_auth_log(file_path):
+LOG_FILE = "/var/log/auth.log"
 
-    parsed_logs = []
+def run_detection():
 
-    with open(file_path, "r") as f:
-        for line in f:
+    events = parse_auth_log(LOG_FILE)
 
-            if "Failed password" in line:
-                match = re.search(r"from (\d+\.\d+\.\d+\.\d+)", line)
+    alerts = detect_bruteforce(events)
 
-                if match:
-                    ip = match.group(1)
+    for alert in alerts:
 
-                    parsed_logs.append({
-                        "event": "failed_login",
-                        "source_ip": ip
-                    })
+        message = f"""
+        ALERT: SSH Brute Force Detected
 
-    return parsed_logs
+        Source IP: {alert['source_ip']}
+        Attempts: {alert['attempts']}
+        """
+
+        print(message)
+
+        send_alert(message)
+
+
+if __name__ == "__main__":
+    run_detection()
