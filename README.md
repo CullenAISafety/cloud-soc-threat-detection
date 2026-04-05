@@ -38,6 +38,6 @@ Azure VNet
 
 Author: Cullen E. Mathews
 
-**Liscenese**
+**License**
 
 All Rights reserved.
