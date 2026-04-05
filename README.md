@@ -1,6 +1,3 @@
-# cloud-soc-threat-detection
-
-
 # Cloud SOC Threat Detection Platform
 
 A cloud-based Security Operations Center (SOC) simulation built on Azure.
